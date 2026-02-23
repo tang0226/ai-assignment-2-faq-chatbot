@@ -1,0 +1,40 @@
+# My first LLM project
+
+Made for an AI class assignment.
+
+This simple chatbot app uses a RAG architecture to retrieve relavent information about recent smartphone models from designer websites. This allows the chatbot to give accurate, helpful information in response to user questions about these recent smartphones.
+
+Uses `langchain` libraries and integrations for document, agent, and model management; `chromadb` for embedding vector storage; and `beautifulsoup4` for HTML parsing.
+
+## Running the app
+Clone this repo, then navigate to its main directory.
+
+Ensure Python 3.11 is installed (this is required because recent versions of Python do not work with core Pydantic V1 functionality (see a related GitHub issue [here](https://github.com/chroma-core/chroma/issues/5996)).
+### Create a Python 3.11 virtual environment:
+The 
+```bash
+python3.11 -m venv .venv
+```
+
+### Activate the virtual environment:
+MacOS/Linux:
+```bash
+source .venv/bin/activate
+```
+
+Windows:
+```
+.venv\Scripts\activate
+```
+
+### Install required modules using `pip`:
+```bash
+pip install langchain langchain-community langchain-openai langchain-chroma beautifulsoup4
+```
+
+### Run the chatbot:
+```bash
+python main.py
+```
+
+If the `OPEN_AI_API_KEY` environment variable is not set, you will be prompted to paste in your API key when the program starts.
