@@ -4,6 +4,7 @@ import getpass
 import re
 
 from langchain_community.document_loaders import WebBaseLoader
+from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
@@ -35,7 +36,7 @@ url_config = [
   # Samsung
   # Galaxy S25|S25+
   {
-    'url': 'https://www.samsung.com/ca/smartphones/galaxy-s25/',
+    'url': 'https://www.samsung.com/us/smartphones/galaxy-s25/',
     'strainer': samsung_strainer,
   },
   # Galaxy S25 Edge
@@ -53,14 +54,14 @@ url_config = [
     'url': 'https://www.samsung.com/us/smartphones/galaxy-s25-fe/',
     'strainer': samsung_strainer,
   },
-  # Galaxy Z Flip7 FE
-  {
-    'url': 'https://www.samsung.com/us/smartphones/galaxy-z-flip7-fe/',
-    'strainer': samsung_strainer,
-  },
   # Galaxy Z Flip7
   {
     'url': 'https://www.samsung.com/us/smartphones/galaxy-z-flip7/',
+    'strainer': samsung_strainer,
+  },
+  # Galaxy Z Flip7 FE
+  {
+    'url': 'https://www.samsung.com/us/smartphones/galaxy-z-flip7-fe/',
     'strainer': samsung_strainer,
   },
   # Galaxy Z Fold7
@@ -106,7 +107,7 @@ url_config = [
   {
     'url': 'https://store.google.com/product/pixel_10_specs?hl=en-US',
     'strainer': google_strainer,
-    'context': 'Google Pixel 10 tech specs:\n'
+    'context': 'Google Pixel 10 specs'
   },
   # Google Pixel 10 Pro
   {
@@ -117,7 +118,7 @@ url_config = [
   {
     'url': 'https://store.google.com/product/pixel_10_pro_specs?hl=en-US',
     'strainer': google_strainer,
-    'context': 'Google Pixel 10 Pro tech specs:\n'
+    'context': 'Google Pixel 10 Pro specs'
   },
   # Google Pixel 10 Pro Fold
   {
@@ -128,7 +129,7 @@ url_config = [
   {
     'url': 'https://store.google.com/product/pixel_10_pro_fold_specs?hl=en-US',
     'strainer': google_strainer,
-    'context': 'Google Pixel 10 Pro Fold tech specs:\n'
+    'context': 'Google Pixel 10 Pro Fold specs'
   },
   # Google Pixel 10a
   {
@@ -139,7 +140,7 @@ url_config = [
   {
     'url': 'https://store.google.com/product/pixel_10a_specs?hl=en-US',
     'strainer': google_strainer,
-    'context': 'Google Pixel 10a tech specs:\n'
+    'context': 'Google Pixel 10a specs'
   },
 ]
 
@@ -149,12 +150,12 @@ url_config = [
 ########################
 
 # Condense large amounts of whitespace
-def clean_whitespace(text):
+def clean_whitespace(text: str) -> str:
   text = re.sub(r'\n{3,}', '\n\n', text)
   text = re.sub(r'[ \t]{2,}', ' ', text)
   return text.strip()
 
-def load_docs_from_urls(url_config):
+def load_docs_from_urls(url_config: dict) -> list[Document]:
   docs = []
   for config in url_config:
     loader = WebBaseLoader(
@@ -163,11 +164,12 @@ def load_docs_from_urls(url_config):
       # bypass SSL verification errors during fetching
       requests_kwargs={'verify': False}
     )
-    doc = loader.load()[0]
-
+    loaded = loader.load()
+    assert len(loaded) == 1
+    doc = loaded[0]
     # add extra context (used for Google Pixel spec pages)
     if 'context' in config:
-      doc.page_content = config['context'] + doc.page_content
+      doc.page_content = config['context'] + '\n\n'+ doc.page_content
     doc.page_content = clean_whitespace(doc.page_content)
     docs.append(doc)
   return docs
@@ -223,7 +225,7 @@ tools = [retrieve_context]
 
 model = ChatOpenAI(
   model='gpt-4.1',
-  temperature=0.1,
+  temperature=0.2,
 )
 
 system_prompt = """
