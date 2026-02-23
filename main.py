@@ -3,17 +3,23 @@ import os
 import getpass
 import re
 
+# Beautiful Soup 4
+import bs4
+
+# Document imports
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# Integrations
 from langchain_openai import OpenAIEmbeddings
-from langchain_chroma import Chroma
-from langchain.tools import tool
 from langchain_openai import ChatOpenAI
+from langchain_chroma import Chroma
+
+# Agent imports
+from langchain.tools import tool
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import InMemorySaver
-
-import bs4
 
 # ignore WebBaseLoader warnings
 warnings.filterwarnings('ignore', message='Unverified HTTPS request')
