@@ -14,6 +14,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 import bs4
 
+# ignore WebBaseLoader warnings
 warnings.filterwarnings('ignore', message='Unverified HTTPS request')
 
 
@@ -29,6 +30,7 @@ if not os.environ.get("OPENAI_API_KEY"):
 apple_strainer = bs4.SoupStrainer(id='main')
 google_strainer = bs4.SoupStrainer('main')
 samsung_strainer = bs4.SoupStrainer(id='content')
+# All source URLs
 url_config = [
   # Samsung
   # Galaxy S25|S25+
@@ -162,9 +164,6 @@ def load_docs_from_urls(url_config):
       requests_kwargs={'verify': False}
     )
     doc = loader.load()[0]
-    
-    # Give the doc a unique id
-    doc.id = config['url']
 
     # add extra context (used for Google Pixel spec pages)
     if 'context' in config:
@@ -176,8 +175,6 @@ def load_docs_from_urls(url_config):
 print('Loading docs from source URLs...')
 docs = load_docs_from_urls(url_config)
 
-for d in docs:
-  print(len(d.page_content), '|', d.metadata['source'])
 
 ##########################
 ### DOCUMENT SPLITTING ###
