@@ -9,9 +9,10 @@ Uses `langchain` libraries and integrations for document, agent, and model manag
 ## Running the app
 Clone this repo, then navigate to its main directory.
 
-Ensure Python 3.11 is installed (this is required because recent versions of Python do not work with core Pydantic V1 functionality (see a related GitHub issue [here](https://github.com/chroma-core/chroma/issues/5996)).
+Ensure Python 3.11 is installed (https://www.python.org/downloads/).
+
+This is required because recent versions of Python do not work with core Pydantic V1 functionality (see a related GitHub issue [here](https://github.com/chroma-core/chroma/issues/5996)).
 ### Create a Python 3.11 virtual environment:
-The 
 ```bash
 python3.11 -m venv .venv
 ```
