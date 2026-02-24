@@ -1,4 +1,5 @@
 # My first LLM project
+## View my report here: https://docs.google.com/document/d/1dHaRRZ75O1e_vkmDgR618treAUfdDkI89V5GJ30SWgY/edit?usp=sharing
 
 Made for an AI class assignment.
 
